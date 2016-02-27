@@ -1,0 +1,25 @@
+{
+  "name": "ham-sandwich",
+  "version": "0.0.1",
+  "description": "The universal object of consumption.",
+  "main": "src/index.js",
+  "dependencies": {
+    "bunyan": "1.5.1",
+    "lodash": "^4.5.1",
+    "restify": "^4.0.3",
+    "restify-errors": "^3.1.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.5.1",
+    "babel-preset-es2015": "^6.5.0",
+    "babel-preset-stage-1": "^6.5.0"
+  },
+  "scripts": {
+    "start": "nodemon src/index.js --exec babel-node",
+    "build": "babel src -d dist",
+    "serve": "node dist/index.js",
+    "test": "mocha --compilers js:babel-register"
+  },
+  "author": "plougsgaard",
+  "license": "MIT"
+}
