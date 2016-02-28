@@ -6,7 +6,9 @@
   "dependencies": {
     "koa": "^2.0.0-alpha.3",
     "koa-router": "^7.0.1",
-    "lodash": "^4.5.1"
+    "lodash": "^4.5.1",
+    "pg-promise": "^3.2.3",
+    "uuid": "^2.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.5.1",
@@ -17,7 +19,8 @@
     "start": "nodemon src/index.js --exec babel-node",
     "build": "babel src -d dist",
     "serve": "node dist/index.js",
-    "test": "mocha --compilers js:babel-register"
+    "test": "mocha --compilers js:babel-register",
+    "db:reset": "./sql/reset.sh"
   },
   "author": "plougsgaard",
   "license": "MIT"

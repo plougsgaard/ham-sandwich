@@ -1,15 +1,23 @@
 import KoaRouter from 'koa-router'
 
+import {
+  getUserById,
+  getUsers
+} from '../controllers/users'
+
 const router = new KoaRouter()
 
-const fakeData = [
-  { name: 'Ben' },
-  { name: 'Dario' },
-  { name: 'Bran' }
-]
+router.get('/users/:userId', async (ctx) => {
+  const { userId } = ctx.params
+  ctx.body = await getUserById(userId)
+})
 
-router.get('/users', (ctx) => {
-  ctx.body = fakeData
+router.get('/users', async (ctx) => {
+  ctx.body = await getUsers()
+})
+
+router.post('/users', async (ctx) => {
+  throw new Error('This might result in a 500..')
 })
 
 export default router
