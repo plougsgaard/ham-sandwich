@@ -1,13 +1,12 @@
 {
   "name": "ham-sandwich",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The universal object of consumption.",
   "main": "src/index.js",
   "dependencies": {
-    "bunyan": "1.5.1",
-    "lodash": "^4.5.1",
-    "restify": "^4.0.3",
-    "restify-errors": "^3.1.0"
+    "koa": "^2.0.0-alpha.3",
+    "koa-router": "^7.0.1",
+    "lodash": "^4.5.1"
   },
   "devDependencies": {
     "babel-cli": "^6.5.1",

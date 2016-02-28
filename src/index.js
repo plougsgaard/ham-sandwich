@@ -1,15 +1,19 @@
-import fs from 'fs'
-import path from 'path'
-import bunyan from 'bunyan'
-import restify from 'restify'
+import _ from 'lodash'
+import Koa from 'koa'
+import KoaRouter from 'koa-router'
 
-import { log } from './logger'
-import { createServer } from './server'
+import routers from './routers'
+import logger from './logger'
 
-const server = createServer({
-  log
+const PORT = process.env.PORT || 8200
+
+const server = new Koa()
+
+server.use(logger)
+_.each(routers, (r) => {
+  server.use(r.routes())
 })
 
-server.listen(8200, () => {
-  log.info(`Listening at ${server.url}..`)
+server.listen(PORT, () => {
+  console.log(`Listening at ${PORT}..`)
 })
