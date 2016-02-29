@@ -1,6 +1,7 @@
 import Koa from 'koa'
 import KoaRouter from 'koa-router'
 
+import corsMiddleware from 'kcors'
 import errorsMiddleware from './middleware/errors'
 import loggerMiddleware from './middleware/logger'
 
@@ -9,6 +10,9 @@ import { authRouter, protectedRouter } from './routers'
 import { PORT } from './config'
 
 const server = new Koa()
+
+// CORS
+server.use(corsMiddleware())
 
 // middleware for handling (uncaught) errors
 server.use(errorsMiddleware)
