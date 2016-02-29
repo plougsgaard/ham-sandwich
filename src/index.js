@@ -1,16 +1,12 @@
-import _ from 'lodash'
 import Koa from 'koa'
 import KoaRouter from 'koa-router'
 
 import errorsMiddleware from './middleware/errors'
 import loggerMiddleware from './middleware/logger'
 
-import {
-  authRouter,
-  usersRouter
-} from './routers'
+import { authRouter, protectedRouter } from './routers'
 
-const PORT = process.env.PORT || 8200
+import { PORT } from './config'
 
 const server = new Koa()
 
@@ -24,7 +20,7 @@ server.use(loggerMiddleware)
 server.use(authRouter.routes())
 
 // protected routes
-server.use(usersRouter.routes())
+server.use(protectedRouter.routes())
 
 server.listen(PORT, () => {
   console.log(`Listening at ${PORT}..`)
