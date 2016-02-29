@@ -2,9 +2,9 @@ import _ from 'lodash'
 import Koa from 'koa'
 import KoaRouter from 'koa-router'
 
-import auth from './auth'
-import errors from './errors'
-import logger from './logger'
+import authMiddleware from './middleware/auth'
+import errorsMiddleware from './middleware/errors'
+import loggerMiddleware from './middleware/logger'
 import {
   authRouter,
   usersRouter
@@ -15,13 +15,13 @@ const PORT = process.env.PORT || 8200
 const server = new Koa()
 
 // authentication
-server.use(auth)
+server.use(authMiddleware)
 
 // middleware for handling (uncaught) errors
-server.use(errors)
+server.use(errorsMiddleware)
 
 // middleware for logging and timing
-server.use(logger)
+server.use(loggerMiddleware)
 
 // public routes
 server.use(authRouter.routes())

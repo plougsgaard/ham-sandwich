@@ -1,4 +1,4 @@
-import { getSession } from './controllers/auth'
+import { getSession } from '../controllers/auth'
 
 const authMiddleware = async (ctx, next) => {
   const { path } = ctx
