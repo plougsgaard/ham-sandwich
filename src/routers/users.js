@@ -1,5 +1,8 @@
 import KoaRouter from 'koa-router'
 
+import sessionMiddleware from '../middleware/session'
+import authMiddleware from '../middleware/auth'
+
 import {
   getUserById,
   getUsers
@@ -7,9 +10,12 @@ import {
 
 const router = new KoaRouter()
 
+router.use(sessionMiddleware, authMiddleware)
+
 router.get('/users/:userId', async (ctx) => {
   const { userId } = ctx.params
   ctx.body = await getUserById(userId)
+  console.log(ctx.session)
 })
 
 router.get('/users', async (ctx) => {
