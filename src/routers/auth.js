@@ -8,11 +8,12 @@ import {
 const router = new KoaRouter()
 
 router.post('/auth/login', async (ctx) => {
-  const token = await login(1)
-  if (token) {
+  try {
+    ctx.body = await login(ctx.request.body)
     ctx.status = 200
-    ctx.body = token
-  } else {
+  }
+  catch (err) {
+    console.error(err)
     ctx.status = 403
   }
 })

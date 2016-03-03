@@ -26,15 +26,21 @@ export const getSession = async (sessionId) => {
   }
 }
 
-export const validateCredentials = async (userId, password) => {
-  return true
+const getUserId = async (email, digest) => {
+  const sql = `
+    SELECT id
+    FROM users
+    WHERE email = lower($(email))
+    AND digest = $(digest)`
+  const values = {
+    email,
+    digest
+  }
+  return await db.one(sql, values)
 }
 
-export const login = async (userId, password) => {
-  const valid = await validateCredentials(userId, password)
-  if (!valid) {
-    return null
-  }
+export const login = async ({ email, digest }) => {
+  const userId = (await getUserId(email, digest)).id
   const id = uuid.v4()
   const sql = `
     INSERT INTO sessions (id, user_id, ip_address, user_agent, expired_at)

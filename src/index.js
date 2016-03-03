@@ -1,6 +1,7 @@
 import Koa from 'koa'
 import KoaRouter from 'koa-router'
 
+import bodyParser from 'koa-bodyparser'
 import corsMiddleware from 'kcors'
 import errorsMiddleware from './middleware/errors'
 import loggerMiddleware from './middleware/logger'
@@ -10,6 +11,9 @@ import { authRouter, protectedRouter } from './routers'
 import { PORT } from './config'
 
 const server = new Koa()
+
+// gain access to request bodies
+server.use(bodyParser())
 
 // CORS
 server.use(corsMiddleware())

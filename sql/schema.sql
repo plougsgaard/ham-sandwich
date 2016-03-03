@@ -10,16 +10,13 @@ CREATE TYPE user_role AS ENUM ('ADMIN', 'MOD', 'MEMBER', 'BANNED');
 
 CREATE TABLE users (
   id             serial PRIMARY KEY,
-  uname          text NOT NULL,
   role           user_role NOT NULL DEFAULT 'MEMBER'::user_role,
   digest         text NOT NULL,
-  email          text NULL,
+  email          text NOT NULL,
   last_online_at timestamptz NOT NULL DEFAULT NOW(),
   created_at     timestamptz NOT NULL DEFAULT NOW()
 );
 
--- Ensure unames are unique and speed up lower(uname) lookup
-CREATE UNIQUE INDEX unique_uname ON users (lower(uname));
 -- Speed up lower(email) lookup
 CREATE INDEX lower_email ON users (lower(email));
 
