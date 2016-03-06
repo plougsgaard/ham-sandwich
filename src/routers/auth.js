@@ -1,4 +1,5 @@
 import KoaRouter from 'koa-router'
+import Boom from 'boom'
 
 import {
   login,
@@ -13,8 +14,8 @@ router.post('/auth/login', async (ctx) => {
     ctx.status = 200
   }
   catch (err) {
-    console.error(err)
-    ctx.status = 403
+    ctx.body = Boom.unauthorized('(╯°□°）╯︵ ┻━┻')
+    ctx.status = 401
   }
 })
 

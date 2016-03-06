@@ -4,6 +4,7 @@
   "description": "The universal object of consumption.",
   "main": "src/index.js",
   "dependencies": {
+    "boom": "^3.1.2",
     "kcors": "^2.0.0",
     "koa": "^2.0.0-alpha.3",
     "koa-bodyparser": "^3.0.0",
