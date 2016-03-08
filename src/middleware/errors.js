@@ -6,6 +6,7 @@ const errors = async (ctx, next) => {
     await next()
   }
   catch (err) {
+    console.error(err)
     if (err instanceof QueryResultError) {
       ctx.body = Boom.notFound('¯\(º o)/¯')
       ctx.status = 404

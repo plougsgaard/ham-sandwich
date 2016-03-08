@@ -66,3 +66,41 @@ export const logout = async (sessionId) => {
   }
   return await db.none(sql, values)
 }
+
+export const resetRequest = async (email) => {
+  const sql = `
+    INSERT INTO reset_tokens (user_email, token)
+    VALUES ($(email), $(token))
+    RETURNING token`
+  const values = {
+    email,
+    token: uuid.v4()
+  }
+  return await db.one(sql, values)
+}
+
+export const resetConfirm = async ({ token, digest }) => {
+  const selectInActiveSql = `
+    SELECT user_email as email
+    FROM active_reset_tokens
+    WHERE token = $(token)`
+  const updateUsersSql = `
+    UPDATE users
+    SET digest = $(digest)
+    WHERE email IN (${selectInActiveSql})`
+  const updateTokensSql = `
+    UPDATE reset_tokens
+    SET used_at = NOW()
+    WHERE token = $(token)
+      AND used_at IS NULL`
+  const values = {
+    digest,
+    token
+  }
+  return await db.tx((transaction) => transaction.batch([
+    // role of `one` is to fail the transaction if the token isn't valid
+    transaction.one(selectInActiveSql, values),
+    transaction.none(updateUsersSql, values),
+    transaction.none(updateTokensSql, values)
+  ]))
+}

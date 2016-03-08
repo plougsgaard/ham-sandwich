@@ -1,12 +1,12 @@
 import KoaRouter from 'koa-router'
 
-import sessionMiddleware from '../middleware/session'
-import authMiddleware from '../middleware/auth'
+import sessionMiddleware from '../../middleware/session'
+import authMiddleware from '../../middleware/auth'
 
 import {
   getUserById,
   getUsers
-} from '../controllers/users'
+} from '../../controllers/users'
 
 const router = new KoaRouter()
 
