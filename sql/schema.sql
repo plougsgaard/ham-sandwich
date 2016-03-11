@@ -1,8 +1,5 @@
 -- Schema quickstart by https://github.com/danneu
 
-DROP SCHEMA public CASCADE;
-CREATE SCHEMA public;
-
 ------------------------------------------------------------
 ------------------------------------------------------------
 
