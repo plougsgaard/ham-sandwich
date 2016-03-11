@@ -45,7 +45,6 @@ HTTP/1.1 200 OK
 [..]
 ```
 
-*actual result omitted for brevity.
 \*actual result omitted for brevity.
 
 ## PostgreSQL 9.4.x on Debian 8
