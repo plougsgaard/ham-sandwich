@@ -73,3 +73,51 @@ This will prompt for a password. Come up with a great one using `apg`.
 
 `createdb -O development development`
 
+## nodejs and pm2 on Debian 8
+
+Get `nvm`.
+
+`curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash`
+
+Install `node`.
+
+`nvm install v5.8.0`
+
+Install `pm2`.
+
+`npm i pm2 -g`
+
+## Setup reverse proxy vhost
+
+`sudo emacs /etc/apache2/sites-available/api.example.com.conf`
+
+```
+<VirtualHost *:80>
+ServerName api.example.com
+ProxyPreserveHost on
+ProxyPass / http://localhost:9999/
+ProxyPassReverse / http://localhost:9999/
+</VirtualHost>
+```
+
+`sudo a2ensite api.example.com && sudo service apache2 restart`
+
+## Config
+
+The scripts require a bunch of environment variables. You may optionally set them in `variables.conf`.
+
+Example layout:
+
+```
+#!/bin/sh
+export NODE_ENV=production
+export DB_HOST="localhost"
+export DB_NAME="hamwich"
+export DB_PORT=5432
+export DB_USER="development"
+export DB_PASS="development"
+export DB_REMOTE_HOST=example.com
+export PORT=9999
+export SCP_HOST="example.com"
+export SCP_PATH="~/hamwich/"
+```

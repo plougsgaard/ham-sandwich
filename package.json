@@ -4,6 +4,7 @@
   "description": "The universal object of consumption.",
   "main": "src/index.js",
   "dependencies": {
+    "babel-plugin-transform-inline-environment-variables": "^6.5.0",
     "boom": "^3.1.2",
     "kcors": "^2.0.0",
     "koa": "^2.0.0-alpha.3",
@@ -22,9 +23,8 @@
   },
   "scripts": {
     "start": "nodemon src/index.js --exec babel-node",
-    "build": "babel src -d dist",
-    "serve": "node dist/index.js",
-    "test": "mocha --compilers js:babel-register",
+    "build": "./scripts/build.sh",
+    "deploy": "./scripts/deploy.sh",
     "db:reset": "./scripts/reset.sh",
     "db:reset:remote": "./scripts/reset.sh remote"
   },
