@@ -6,7 +6,7 @@ import corsMiddleware from 'kcors'
 import errorsMiddleware from './middleware/errors'
 import loggerMiddleware from './middleware/logger'
 
-import { authRouter, protectedRouter } from './routers'
+import { publicRouter, protectedRouter } from './routers'
 
 const run = (port) => {
   const server = new Koa()
@@ -24,9 +24,11 @@ const run = (port) => {
   server.use(loggerMiddleware)
 
   // public routes
-  server.use(authRouter.routes())
+  server.use(publicRouter.allowedMethods())
+  server.use(publicRouter.routes())
 
   // protected routes
+  server.use(protectedRouter.allowedMethods())
   server.use(protectedRouter.routes())
 
   server.listen(port, () => {

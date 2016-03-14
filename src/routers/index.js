@@ -1,2 +1,2 @@
-export authRouter from './auth'
+export publicRouter from './public'
 export protectedRouter from './protected'

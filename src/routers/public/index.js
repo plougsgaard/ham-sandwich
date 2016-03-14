@@ -1,14 +1,46 @@
 import KoaRouter from 'koa-router'
 import Boom from 'boom'
 
+import hatsRouter from './hats'
+
 import {
   login,
   logout,
   resetRequest,
   resetConfirm
-} from '../controllers/auth'
+} from '../../controllers/auth'
 
 const router = new KoaRouter()
+
+router.use('/hats', hatsRouter.routes(), hatsRouter.allowedMethods())
+
+// START DUMMY ROUTES
+// ------------------
+// ------------------
+// ------------------
+router.get('/user/profile', async (ctx) => {
+  ctx.body = {
+    name: 'Handsome Bob',
+    age: 29
+  }
+})
+// router.get('', async (ctx) => {})
+// router.get('', async (ctx) => {})
+// router.get('', async (ctx) => {})
+
+
+
+
+
+
+
+
+
+//  END DUMMY ROUTES
+// ------------------
+// ------------------
+// ------------------
+
 
 router.post('/auth/login', async (ctx) => {
   try {
