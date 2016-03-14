@@ -3,12 +3,12 @@ import _ from 'lodash'
 
 const FIELDS = `
   id,
+  name,
   uname,
   role,
   email,
   last_online_at,
-  created_at
-`
+  created_at`
 
 export const getUserById = async (userId) =>
   await db.one(`

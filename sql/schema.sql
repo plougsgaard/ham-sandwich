@@ -8,6 +8,7 @@ CREATE TYPE user_role AS ENUM ('ADMIN', 'MOD', 'MEMBER', 'BANNED');
 CREATE TABLE users (
   id             serial PRIMARY KEY,
   role           user_role NOT NULL DEFAULT 'MEMBER'::user_role,
+  name           text NOT NULL,
   digest         text NOT NULL,
   email          text UNIQUE NOT NULL,
   last_online_at timestamptz NOT NULL DEFAULT NOW(),
