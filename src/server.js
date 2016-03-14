@@ -8,9 +8,7 @@ import loggerMiddleware from './middleware/logger'
 
 import { authRouter, protectedRouter } from './routers'
 
-import { PORT } from './config'
-
-const bootstrap = () => {
+const run = (port) => {
   const server = new Koa()
 
   // gain access to request bodies
@@ -31,11 +29,11 @@ const bootstrap = () => {
   // protected routes
   server.use(protectedRouter.routes())
 
-  server.listen(PORT, () => {
-    console.log(`Listening at ${PORT}..`)
+  server.listen(port, () => {
+    console.log(`Listening at ${port}..`)
   })
 }
 
 // BEGIN LEGACY
-module.exports = bootstrap
+module.exports = run
 // END LEGACY

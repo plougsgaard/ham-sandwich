@@ -3,4 +3,6 @@ require('babel-core/register')
 require('babel-polyfill')
 
 // and then we can bootstrap the server
-require('./server')()
+const { PORT } = require('./config')
+const run = require('./server')
+run(PORT)
