@@ -2,6 +2,8 @@ import KoaRouter from 'koa-router'
 import Boom from 'boom'
 import _ from 'lodash'
 
+import { sleep } from '../../controllers/util'
+
 const router = new KoaRouter()
 
 let dummyHats = [
@@ -38,6 +40,7 @@ router.post('/', async (ctx) => {
     ctx.status = 400
     return
   }
+  await sleep(1000) // TODO remove fake sleep
   dummyHats = _.concat(dummyHats, entry)
   ctx.body = entry
 })
@@ -53,6 +56,7 @@ router.put('/:id', async (ctx) => {
     ctx.status = 400
     return
   }
+  await sleep(1000) // TODO remove fake sleep
   dummyHats = _.chain(dummyHats).without(entry).concat(replacement).value()
   ctx.body = replacement
 })

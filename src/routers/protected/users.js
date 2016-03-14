@@ -4,18 +4,23 @@ import _ from 'lodash'
 
 import {
   getUserById,
+  getUserByToken,
   getUsers
 } from '../../controllers/users'
 
 const router = new KoaRouter()
 
-router.get('/users/:userId', async (ctx) => {
-  const { userId } = ctx.params
-  ctx.body = await getUserById(userId)
-  console.log(ctx.session)
+router.get('/profile', async (ctx) => {
+  const { user_id } = ctx.session
+  ctx.body = await getUserById(user_id)
 })
 
-router.get('/users', async (ctx) => {
+router.get('/:userId', async (ctx) => {
+  const { userId } = ctx.params
+  ctx.body = await getUserById(userId)
+})
+
+router.get('/', async (ctx) => {
   ctx.body = await getUsers()
 })
 
