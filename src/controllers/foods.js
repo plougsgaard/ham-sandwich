@@ -2,6 +2,8 @@ import db from '../db'
 import _ from 'lodash'
 import uuid from 'uuid'
 
+import { getBrandByName, addBrand } from './brands'
+
 const FIELDS = `
   *`
 
@@ -69,6 +71,22 @@ export const addFood = async (userId, {
     salt,
     userId
   }
+  const brandRow = _.first(await getBrandByName(brand)) || await addBrand(userId, brand)
   const { id } = await db.one(sql, values)
+  db.none(`
+    INSERT INTO foods_brands (
+      food_id,
+      brand_id,
+      created_by
+    )
+    VALUES (
+      $(foodId),
+      $(brandId),
+      $(userId)
+    )`, {
+      foodId: id,
+      brandId: brandRow.id,
+      userId
+    })
   return await getFoodWithBrands(id)
 }
