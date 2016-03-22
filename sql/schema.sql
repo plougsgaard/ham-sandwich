@@ -68,13 +68,13 @@ CREATE TABLE foods (
   name           text NOT NULL,
   --
   calories       smallint NOT NULL DEFAULT 0 CHECK(calories >= 0),
-  proteins       real NOT NULL DEFAULT 0 CHECK(proteins >= 0),
-  carbohydrates  real NOT NULL DEFAULT 0 CHECK(carbohydrates >= 0),
-  sugars         real NOT NULL DEFAULT 0 CHECK(sugars >= 0),
-  fat            real NOT NULL DEFAULT 0 CHECK(fat >= 0),
-  saturated      real NOT NULL DEFAULT 0 CHECK(saturated >= 0),
-  fibres         real NOT NULL DEFAULT 0 CHECK(fibres >= 0),
-  salt           real NOT NULL DEFAULT 0 CHECK(salt >= 0),
+  proteins       real NULL CHECK(proteins >= 0),
+  carbohydrates  real NULL CHECK(carbohydrates >= 0),
+  sugars         real NULL CHECK(sugars >= 0),
+  fat            real NULL CHECK(fat >= 0),
+  saturated      real NULL CHECK(saturated >= 0),
+  fibres         real NULL CHECK(fibres >= 0),
+  salt           real NULL CHECK(salt >= 0),
   --
   created_by     uuid NOT NULL REFERENCES users(id),
   created_at     timestamptz NOT NULL DEFAULT NOW()
