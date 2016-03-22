@@ -5,6 +5,7 @@ import bodyParser from 'koa-bodyparser'
 import corsMiddleware from 'kcors'
 import errorsMiddleware from './middleware/errors'
 import loggerMiddleware from './middleware/logger'
+import cleanBodyMiddleware from './middleware/cleanBody'
 
 import { publicRouter, protectedRouter } from './routers'
 
@@ -22,6 +23,9 @@ const run = (port) => {
 
   // middleware for logging and timing
   server.use(loggerMiddleware)
+
+  // no need to look at dirty bodies here
+  server.use(cleanBodyMiddleware)
 
   // public routes
   server.use(publicRouter.allowedMethods())
