@@ -24,6 +24,8 @@ INSERT INTO foods (created_by, id, name, calories, carbohydrates) VALUES
 ------------------------------------------------------------
 
 INSERT INTO brands (created_by, id, name) VALUES
+  ('526b896f-00f0-4823-9338-1faf530c35cc', '6d2b8662-cf12-4c60-91f5-a693fc06a9fb', 'Princip'),
+  ('526b896f-00f0-4823-9338-1faf530c35cc', 'a4a28c5c-3c9f-4597-9a75-716de5599bb8', 'Homemade'),
   ('526b896f-00f0-4823-9338-1faf530c35cc', '34a3ca13-0b0e-4356-a732-fa0ab34cc4da', 'Juicorganic');
 
 ------------------------------------------------------------
