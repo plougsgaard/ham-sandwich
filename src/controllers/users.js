@@ -19,11 +19,8 @@ export const getUserById = async (userId) =>
   `, { userId })
 
 export const getUserByToken = async (token) => {
-  const session = await getSession(token)
-  console.log(token, session)
-  const user = await getUserById(session.user_id)
-  console.log(user)
-  return user
+  const { user_id } = await getSession(token)
+  return await getUserById(user_id)
 }
 
 export const getUsers = async () =>
@@ -31,3 +28,19 @@ export const getUsers = async () =>
     SELECT ${FIELDS}
     FROM users
   `)
+
+export const updateProfile = async (userId, {
+  name
+}) => {
+  const sql = `
+    UPDATE users
+    SET name = $(name)
+    WHERE id = $(userId)
+    RETURNING id`
+  const values = {
+    userId,
+    name
+  }
+  const { id } = await db.one(sql, values)
+  return await getUserById(id)
+}
