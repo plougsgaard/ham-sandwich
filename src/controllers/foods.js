@@ -90,3 +90,15 @@ export const addFood = async (userId, {
     })
   return await getFoodWithBrands(id)
 }
+
+export const deleteFood = async (userId, foodId) => {
+  return await db.one(`
+    UPDATE foods
+    SET deleted_at = NOW()
+    WHERE id = $(foodId)
+    AND created_by = $(userId)
+    RETURNING id`, {
+      foodId,
+      userId
+    })
+}

@@ -77,7 +77,8 @@ CREATE TABLE foods (
   salt           real NULL CHECK(salt >= 0),
   --
   created_by     uuid NOT NULL REFERENCES users(id),
-  created_at     timestamptz NOT NULL DEFAULT NOW()
+  created_at     timestamptz NOT NULL DEFAULT NOW(),
+  deleted_at     timestamptz NULL
 );
 
 CREATE TABLE brands (
@@ -100,4 +101,5 @@ CREATE VIEW foods_with_brands AS
   SELECT f.*, b.id AS brand_id, b.name AS brand_name
   FROM foods f
   LEFT JOIN foods_brands fb on f.id = fb.food_id
-  LEFT JOIN brands b on b.id = fb.brand_id;
+  LEFT JOIN brands b on b.id = fb.brand_id
+  WHERE f.deleted_at IS NULL;
