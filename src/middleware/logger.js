@@ -1,5 +1,10 @@
 import moment from 'moment'
 
+/**
+ * Pretty-print nanoseconds timestamps. The math checks out.
+ * 
+ * @param {number} ns - time in nanoseconds
+ */
 const ppns = (ns) => {
   const nss = ns.toFixed(0)
   if (nss.length <= 3) {
@@ -11,7 +16,12 @@ const ppns = (ns) => {
   return `${(ns/1000000).toFixed(0)}ms`
 }
 
-const logger = async (ctx, next) => {
+/**
+ * Super advanced state of the art logger middleware.
+ * 
+ * Uses `hrtime` for precise timestamps. 
+ */
+const loggerMiddleware = async (ctx, next) => {
   const t0 = process.hrtime()
   await next()
 
@@ -23,4 +33,4 @@ const logger = async (ctx, next) => {
   console.log(`${timestamp} - ${ctx.method} ${ctx.url} - ${time}`)
 }
 
-export default logger
+export default loggerMiddleware

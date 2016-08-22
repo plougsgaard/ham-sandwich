@@ -1,7 +1,12 @@
 import Boom from 'boom'
 import { QueryResultError } from 'pg-promise'
 
-const errors = async (ctx, next) => {
+/**
+ * Catch and react to certain errors in handling requests.
+ * 
+ * This likely isn't a good way to handle errors.
+ */
+const errorsMiddleware = async (ctx, next) => {
   try {
     await next()
   }
@@ -17,4 +22,4 @@ const errors = async (ctx, next) => {
   }
 }
 
-export default errors
+export default errorsMiddleware
