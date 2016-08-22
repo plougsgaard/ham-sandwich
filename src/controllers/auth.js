@@ -106,3 +106,18 @@ export const resetConfirm = async ({ token, digest }) => {
     transaction.none(updateTokensSql, values)
   ]))
 }
+
+export const renewSession = async (sessionId) => {
+  const sql = `
+    UPDATE sessions
+    SET expired_at = NOW() + $(interval)::interval
+    WHERE id = $(sessionId)
+    RETURNING
+      id AS token,
+      ${EXPIRED_AT}`
+  const values = {
+    sessionId,
+    interval: SESSION_TTL
+  }
+  return await db.one(sql, values)
+}
