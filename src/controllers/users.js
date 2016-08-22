@@ -3,13 +3,15 @@ import _ from 'lodash'
 
 import { getSession } from './auth'
 
+import { LAST_ONLINE_AT, CREATED_AT } from '../db'
+
 const FIELDS = `
   id,
   name,
   role,
   email,
-  last_online_at,
-  created_at`
+  ${LAST_ONLINE_AT},
+  ${CREATED_AT}`
 
 export const getUserById = async (userId) =>
   await db.one(`

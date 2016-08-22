@@ -2,13 +2,15 @@ import db from '../db'
 import _ from 'lodash'
 import uuid from 'uuid'
 
+import { SESSION_TTL, EXPIRED_AT, CREATED_AT } from '../db'
+
 const FIELDS = `
   id,
   user_id,
   ip_address,
   user_agent,
-  expired_at,
-  created_at`
+  ${EXPIRED_AT},
+  ${CREATED_AT}`
 
 export const getSession = async (sessionId) => {
   const sql = `
@@ -51,7 +53,7 @@ export const login = async ({ email, digest }) => {
     userId,
     ip: '192.168.0.1',
     agent: 'curl',
-    interval: '2 weeks'
+    interval: SESSION_TTL
   }
   return await db.one(sql, values)
 }
