@@ -1,8 +1,24 @@
-// needs to be run before everything else
+//   ██░ ██  ▄▄▄       ▄████▄   ██ ▄█▀
+//  ▓██░ ██▒▒████▄    ▒██▀ ▀█   ██▄█▒
+//  ▒██▀▀██░▒██  ▀█▄  ▒▓█    ▄ ▓███▄░
+//  ░▓█ ░██ ░██▄▄▄▄██ ▒▓▓▄ ▄██▒▓██ █▄
+//  ░▓█▒░██▓ ▓█   ▓██▒▒ ▓███▀ ░▒██▒ █▄
+//   ▒ ░░▒░▒ ▒▒   ▓▒█░░ ░▒ ▒  ░▒ ▒▒ ▓▒
+//   ▒ ░▒░ ░  ▒   ▒▒ ░  ░  ▒   ░ ░▒ ▒░
+//   ░  ░░ ░  ░   ▒   ░        ░ ░░ ░
+//   ░  ░  ░      ░  ░░ ░      ░  ░
+//                    ░
+
+// needs to run as the first thing
 require('babel-core/register')
 require('babel-polyfill')
 
-// and then we can bootstrap the server
-const { PORT } = require('./config')
-const run = require('./server')
-run(PORT)
+// now the server can be bootstrapped
+require('./server')(require('./config').PORT)
+
+//  ███████╗ ██████╗ ██████╗ ██████╗ ██╗   ██╗        ██╗
+//  ██╔════╝██╔═══██╗██╔══██╗██╔══██╗╚██╗ ██╔╝    ██╗██╔╝
+//  ███████╗██║   ██║██████╔╝██████╔╝ ╚████╔╝     ╚═╝██║
+//  ╚════██║██║   ██║██╔══██╗██╔══██╗  ╚██╔╝      ██╗██║
+//  ███████║╚██████╔╝██║  ██║██║  ██║   ██║       ╚═╝╚██╗
+//  ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝           ╚═╝
