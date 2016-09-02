@@ -41,7 +41,10 @@ module.exports = (port) => {
     ctx.status = 404
     ctx.body = Boom.notFound('┬─┬ノ( º _ ºノ)')
   })
+
+  // too clever startup message - bet this is going to bite one day
   server.listen(port, () => {
-    console.log(`Listening at ${port}..`)
+    console.log(` ${port}`)
+    console.log(`┬────┬ (ツ)`)
   })
 }
