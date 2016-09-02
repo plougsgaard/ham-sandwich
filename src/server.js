@@ -1,6 +1,5 @@
 import Koa from 'koa'
 import KoaRouter from 'koa-router'
-import Boom from 'boom'
 
 import bodyParser from 'koa-bodyparser'
 import corsMiddleware from 'kcors'
@@ -9,6 +8,8 @@ import loggerMiddleware from './middleware/logger'
 import cleanBodyMiddleware from './middleware/cleanBody'
 
 import { publicRouter, protectedRouter } from './routers'
+
+import { notFound } from './responses'
 
 module.exports = (port) => {
   const server = new Koa()
@@ -37,10 +38,7 @@ module.exports = (port) => {
   server.use(protectedRouter.routes())
 
   // the 404 catch-all
-  server.use(async (ctx) => {
-    ctx.status = 404
-    ctx.body = Boom.notFound('┬─┬ノ( º _ ºノ)')
-  })
+  server.use(async (ctx) => notFound(ctx))
 
   // too clever startup message - bet this is going to bite one day
   server.listen(port, () => {

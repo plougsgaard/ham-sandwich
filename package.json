@@ -5,7 +5,6 @@
   "main": "src/index.js",
   "dependencies": {
     "babel-plugin-transform-inline-environment-variables": "^6.5.0",
-    "boom": "^3.2.2",
     "kcors": "^2.1.1",
     "koa": "^2.0.0-alpha.6",
     "koa-bodyparser": "^3.2.0",

@@ -1,5 +1,6 @@
 import KoaRouter from 'koa-router'
-import Boom from 'boom'
+
+import { created, noContent, badRequest, unauthorized } from '../../responses'
 
 import {
   login,
@@ -16,41 +17,34 @@ router.post('/auth/login', async (ctx) => {
     ctx.status = 200
   }
   catch (err) {
-    ctx.body = Boom.unauthorized('(╯°□°）╯︵ ┻━┻')
-    ctx.status = 401
+    return unauthorized(ctx)
   }
 })
 
 router.post('/auth/logout', async (ctx) => {
   const { token } = ctx.req.headers
   await logout(token)
-  ctx.status = 204
+  return noContent(ctx)
 })
 
 router.post('/auth/reset/confirm', async (ctx) => {
   const { digest, token } = ctx.request.body
   if (!digest || !token) {
-    ctx.body = Boom.badRequest('Missing digest and/or token in body.')
-    ctx.status = 400
-    return
+    return badRequest(ctx, 'Missing digest or token in body.')
   }
   try {
     await resetConfirm({ digest, token })
-    ctx.status = 201
+    return created(ctx)
   }
   catch (err) {
-    console.error(err)
-    ctx.body = Boom.badRequest('The reset token has been deemed unsatisfactory.')
-    ctx.status = 400
+    return badRequest(ctx, 'The reset token has been deemed unsatisfactory.')
   }
 })
 
 router.post('/auth/reset', async (ctx) => {
   const { email } = ctx.request.body
   if (!email) {
-    ctx.body = Boom.badRequest('Missing email in body.')
-    ctx.status = 400
-    return
+    return badRequest(ctx, 'Missing email in body.')
   }
   try {
     await resetRequest(email)
@@ -60,7 +54,7 @@ router.post('/auth/reset', async (ctx) => {
   }
   finally {
     // same response always to hide internals
-    ctx.status = 201
+    return created(ctx)
   }
 })
 

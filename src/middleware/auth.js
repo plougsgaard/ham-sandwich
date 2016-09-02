@@ -1,5 +1,6 @@
-import Boom from 'boom'
 import { getSession } from '../controllers/auth'
+
+import { unauthorized } from '../responses'
 
 /**
  * Protect resources that require authentication.
@@ -9,8 +10,7 @@ import { getSession } from '../controllers/auth'
 const authMiddleware = async (ctx, next) => {
   const { session } = ctx
   if (!session) {
-    ctx.body = Boom.unauthorized('(╯°□°）╯︵ ┻━┻')
-    ctx.status = 401
+    return unauthorized(ctx)
   } else {
     return await next()
   }

@@ -1,9 +1,10 @@
-import Boom from 'boom'
 import { QueryResultError } from 'pg-promise'
+
+import { notFound, badImplementation } from '../responses'
 
 /**
  * Catch and react to certain errors in handling requests.
- * 
+ *
  * This likely isn't a good way to handle errors.
  */
 const errorsMiddleware = async (ctx, next) => {
@@ -13,11 +14,9 @@ const errorsMiddleware = async (ctx, next) => {
   catch (err) {
     console.error(err)
     if (err instanceof QueryResultError) {
-      ctx.body = Boom.notFound('¯\(º o)/¯')
-      ctx.status = 404
+      return notFound(ctx)
     } else {
-      ctx.body = Boom.badImplementation('Welp')
-      ctx.status = 500
+      return badImplementation(ctx)
     }
   }
 }

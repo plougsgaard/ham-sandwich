@@ -1,5 +1,4 @@
 import KoaRouter from 'koa-router'
-import Boom from 'boom'
 import _ from 'lodash'
 
 import { sleep } from '../../controllers/util'

@@ -1,6 +1,7 @@
 import KoaRouter from 'koa-router'
-import Boom from 'boom'
 import _ from 'lodash'
+
+import { created, noContent, badRequest } from '../../responses'
 
 import { sleep } from '../../controllers/util'
 import {
@@ -19,24 +20,22 @@ router.post('/', async (ctx) => {
   const { user_id } = ctx.session
   const entry = ctx.request.body
   if (_.isEmpty(entry)) {
-    ctx.status = 400
-    return
+    return badRequest(ctx)
   }
-  await sleep(1000) // TODO remove fake sleep
+  await sleep(1000)
   const newEntry = await addFood(user_id, entry)
-  ctx.body = newEntry
+  return created(ctx, newEntry)
 })
 
 router.delete('/', async (ctx) => {
   const { user_id } = ctx.session
   const foodId = _.get(ctx.request, 'body.id')
   if (!foodId) {
-    ctx.status = 400
-    return
+    return badRequest(ctx)
   }
-  await sleep(1000) // TODO remove fake sleep
+  await sleep(1000)
   await deleteFood(user_id, foodId)
-  ctx.status = 204
+  return noContent(ctx)
 })
 
 export default router
