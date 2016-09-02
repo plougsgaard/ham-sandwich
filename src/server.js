@@ -1,5 +1,6 @@
 import Koa from 'koa'
 import KoaRouter from 'koa-router'
+import Boom from 'boom'
 
 import bodyParser from 'koa-bodyparser'
 import corsMiddleware from 'kcors'
@@ -9,7 +10,7 @@ import cleanBodyMiddleware from './middleware/cleanBody'
 
 import { publicRouter, protectedRouter } from './routers'
 
-const run = (port) => {
+module.exports = (port) => {
   const server = new Koa()
 
   // gain access to request bodies
@@ -35,11 +36,12 @@ const run = (port) => {
   server.use(protectedRouter.allowedMethods())
   server.use(protectedRouter.routes())
 
+  // the 404 catch-all
+  server.use(async (ctx) => {
+    ctx.status = 404
+    ctx.body = Boom.notFound('┬─┬ノ( º _ ºノ)')
+  })
   server.listen(port, () => {
     console.log(`Listening at ${port}..`)
   })
 }
-
-// BEGIN LEGACY
-module.exports = run
-// END LEGACY
