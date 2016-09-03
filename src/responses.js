@@ -12,6 +12,12 @@ const getResponse = (status, body) => ({
   body
 })
 
+const successBody = {
+  message: 'ヽ(^。^)ノ'
+}
+export const success = (ctx, body = createdBody) =>
+  Object.assign(ctx, getResponse(200, body))
+
 const createdBody = {
   message: 'ヽ(^。^)ノ'
 }
