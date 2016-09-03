@@ -1,43 +1,57 @@
--- Schema quickstart by https://github.com/danneu
-
+------------------------------------------------------------
+------------------------------------------------------------
+--
+-- Premature optimization is the root of all evil and this
+-- schema file is full of it.
+--
+-- (>_<)
+--
+-- I'll show myself out.
+--
 ------------------------------------------------------------
 ------------------------------------------------------------
 
-CREATE TYPE user_role AS ENUM ('ADMIN', 'MOD', 'MEMBER', 'BANNED');
+-- Enable the uuid functions
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+------------------------------------------------------------
+------------------------------------------------------------
 
 CREATE TABLE users (
-  id             uuid PRIMARY KEY,
-  role           user_role NOT NULL DEFAULT 'MEMBER'::user_role,
-  name           text NOT NULL,
-  digest         text NOT NULL,
-  email          text UNIQUE NOT NULL,
+  id uuid PRIMARY KEY,
+  role text NOT NULL DEFAULT 'user',
+  name text NOT NULL,
+  digest text NOT NULL,
+  email text UNIQUE NOT NULL,
   --
   last_online_at timestamptz NOT NULL DEFAULT NOW(),
-  created_at     timestamptz NOT NULL DEFAULT NOW()
+  created_at timestamptz NOT NULL DEFAULT NOW()
+  --
+  CONSTRAINT role_kind CHECK(role IN ('user', 'admin'))
 );
 
 -- Speed up lower(email) lookup
-CREATE INDEX lower_email ON users (lower(email));
+CREATE INDEX lower_email ON users (LOWER(email));
 
 ------------------------------------------------------------
 ------------------------------------------------------------
 
 CREATE TABLE sessions (
-  id             uuid PRIMARY KEY,
-  user_id        uuid NOT NULL REFERENCES users(id),
-  ip_address     inet NOT NULL,
-  user_agent     text NULL,
+  id uuid PRIMARY KEY,
+  user_id uuid NOT NULL REFERENCES users(id),
+  ip_address inet NOT NULL,
+  user_agent text NULL,
   --
-  expired_at     timestamptz NOT NULL DEFAULT NOW() + INTERVAL '2 weeks',
-  created_at     timestamptz NOT NULL DEFAULT NOW()
   logout_at timestamptz NULL,
+  expired_at timestamptz NOT NULL DEFAULT NOW() + INTERVAL '2 weeks',
+  created_at timestamptz NOT NULL DEFAULT NOW()
 );
 
 -- Speed up user_id FK joins
 CREATE INDEX sessions__user_id ON sessions (user_id);
 
 CREATE VIEW active_sessions AS
-  SELECT *
+  SELECT id, user_id, expired_at
   FROM sessions
   WHERE expired_at > NOW()
     AND logout_at IS NULL;
@@ -46,16 +60,19 @@ CREATE VIEW active_sessions AS
 ------------------------------------------------------------
 
 CREATE TABLE reset_tokens (
-  user_email     text NOT NULL REFERENCES users(email),
-  token          uuid NOT NULL,
+  user_email text NOT NULL REFERENCES users(email),
+  token uuid NOT NULL,
   --
-  used_at        timestamptz NULL,
-  expired_at     timestamptz NOT NULL DEFAULT NOW() + INTERVAL '3 days',
-  created_at     timestamptz NOT NULL DEFAULT NOW()
+  used_at timestamptz NULL,
+  expired_at timestamptz NOT NULL DEFAULT NOW() + INTERVAL '3 days',
+  created_at timestamptz NOT NULL DEFAULT NOW()
 );
 
+-- Speed up lower(email) lookup
+CREATE INDEX reset_tokens__lower_user_email ON reset_tokens (LOWER(user_email));
+
 CREATE VIEW active_reset_tokens AS
-  SELECT *
+  SELECT user_email
   FROM reset_tokens
   WHERE expired_at > NOW()
     AND used_at IS NULL;
@@ -64,38 +81,58 @@ CREATE VIEW active_reset_tokens AS
 ------------------------------------------------------------
 
 CREATE TABLE foods (
-  id             uuid PRIMARY KEY,
-  name           text NOT NULL,
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name text NOT NULL,
   --
-  calories       smallint NOT NULL DEFAULT 0 CHECK(calories >= 0),
-  proteins       real NULL CHECK(proteins >= 0),
-  carbohydrates  real NULL CHECK(carbohydrates >= 0),
-  sugars         real NULL CHECK(sugars >= 0),
-  fat            real NULL CHECK(fat >= 0),
-  saturated      real NULL CHECK(saturated >= 0),
-  fibres         real NULL CHECK(fibres >= 0),
-  salt           real NULL CHECK(salt >= 0),
+  calories real NULL,
+  proteins real NULL,
+  carbohydrates real NULL,
+  sugars real NULL,
+  fat real NULL,
+  saturated real NULL,
+  fibres real NULL,
+  salt real NULL,
   --
-  created_by     uuid NOT NULL REFERENCES users(id),
-  created_at     timestamptz NOT NULL DEFAULT NOW(),
-  deleted_at     timestamptz NULL
+  created_by uuid NOT NULL REFERENCES users(id),
+  created_at timestamptz NOT NULL DEFAULT NOW(),
+  deleted_at timestamptz NULL
+  --
+  CONSTRAINT calories_positive CHECK(calories >= 0)
+  CONSTRAINT proteins_positive CHECK(proteins >= 0)
+  CONSTRAINT carbohydrates_positive CHECK(carbohydrates >= 0)
+  CONSTRAINT sugars_positive CHECK(sugars >= 0)
+  CONSTRAINT sugars_lte_carbohydrates CHECK (sugars <= carbohydrates)
+  CONSTRAINT fat_positive CHECK(fat >= 0)
+  CONSTRAINT saturated_positive CHECK(saturated >= 0)
+  CONSTRAINT saturated_lte_fat CHECK(saturated <= fat)
+  CONSTRAINT fibres_positive CHECK(fibres >= 0)
+  CONSTRAINT salt_positive CHECK(salt >= 0)
 );
+
+------------------------------------------------------------
+------------------------------------------------------------
 
 CREATE TABLE brands (
-  id             uuid PRIMARY KEY,
-  name           text NOT NULL,
+  id uuid PRIMARY KEY,
+  name text NOT NULL,
   --
-  created_by     uuid NOT NULL REFERENCES users(id),
-  created_at     timestamptz NOT NULL DEFAULT NOW()
+  created_by uuid NOT NULL REFERENCES users(id),
+  created_at timestamptz NOT NULL DEFAULT NOW()
 );
 
+------------------------------------------------------------
+------------------------------------------------------------
+
 CREATE TABLE foods_brands (
-  food_id        uuid NOT NULL REFERENCES foods(id),
-  brand_id       uuid NOT NULL REFERENCES brands(id),
+  food_id uuid NOT NULL REFERENCES foods(id),
+  brand_id uuid NOT NULL REFERENCES brands(id),
   --
-  created_by     uuid NOT NULL REFERENCES users(id),
-  created_at     timestamptz NOT NULL DEFAULT NOW()
+  created_by uuid NOT NULL REFERENCES users(id),
+  created_at timestamptz NOT NULL DEFAULT NOW()
 );
+
+------------------------------------------------------------
+------------------------------------------------------------
 
 CREATE VIEW foods_with_brands AS
   SELECT f.*, b.id AS brand_id, b.name AS brand_name
