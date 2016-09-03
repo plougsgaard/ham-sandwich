@@ -30,12 +30,12 @@ export default database
  * @param  {string} column - name of table column
  * @return {string} selector for column extracting the UNIX timestamp
  */
-const selectAsUnix = (column) => `EXTRACT(EPOCH FROM ${column}) AS ${column}`
+const selectEpochMilliseconds = (column) => `ROUND(EXTRACT(EPOCH FROM ${column}) * 1000) AS ${column}`
 
-export const EXPIRED_AT = selectAsUnix('expired_at')
-export const CREATED_AT = selectAsUnix('created_at')
-export const UPDATED_AT = selectAsUnix('updated_at')
-export const LAST_ONLINE_AT = selectAsUnix('last_online_at')
+export const EXPIRED_AT = selectEpochMilliseconds('expired_at')
+export const CREATED_AT = selectEpochMilliseconds('created_at')
+export const UPDATED_AT = selectEpochMilliseconds('updated_at')
+export const LAST_ONLINE_AT = selectEpochMilliseconds('last_online_at')
 
 /**
  * A session's time to live.
