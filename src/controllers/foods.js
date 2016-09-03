@@ -2,10 +2,25 @@ import db from '../db'
 import _ from 'lodash'
 import uuid from 'uuid'
 
+import { CREATED_AT } from '../db'
+
 import { getBrandByName, addBrand } from './brands'
 
 const FIELDS = `
-  *`
+  id,
+  name,
+  calories,
+  carbohydrates,
+  sugars,
+  proteins,
+  fat,
+  saturated,
+  fibres,
+  salt,
+  created_by,
+  ${CREATED_AT},
+  brand_id,
+  brand_name`
 
 export const getFoodsWithBrands = async () =>
   await db.many(`
