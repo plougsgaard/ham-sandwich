@@ -28,9 +28,9 @@ CREATE TABLE sessions (
   ip_address     inet NOT NULL,
   user_agent     text NULL,
   --
-  logged_out_at  timestamptz NULL,
   expired_at     timestamptz NOT NULL DEFAULT NOW() + INTERVAL '2 weeks',
   created_at     timestamptz NOT NULL DEFAULT NOW()
+  logout_at timestamptz NULL,
 );
 
 -- Speed up user_id FK joins
@@ -40,7 +40,7 @@ CREATE VIEW active_sessions AS
   SELECT *
   FROM sessions
   WHERE expired_at > NOW()
-    AND logged_out_at IS NULL;
+    AND logout_at IS NULL;
 
 ------------------------------------------------------------
 ------------------------------------------------------------

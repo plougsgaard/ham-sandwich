@@ -4,17 +4,9 @@ import uuid from 'uuid'
 
 import { SESSION_TTL, EXPIRED_AT, CREATED_AT } from '../db'
 
-const FIELDS = `
-  id,
-  user_id,
-  ip_address,
-  user_agent,
-  ${EXPIRED_AT},
-  ${CREATED_AT}`
-
 export const getSession = async (sessionId) => {
   const sql = `
-    SELECT ${FIELDS}
+    SELECT id,user_id
     FROM active_sessions
     WHERE id = $(sessionId)`
   const values = {
@@ -61,7 +53,7 @@ export const login = async ({ email, digest }) => {
 export const logout = async (sessionId) => {
   const sql = `
     UPDATE sessions
-    SET logged_out_at = NOW()
+    SET logout_at = NOW()
     WHERE id = $(sessionId)`
   const values = {
     sessionId
