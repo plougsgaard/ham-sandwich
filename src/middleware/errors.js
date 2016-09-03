@@ -1,6 +1,6 @@
-import { QueryResultError } from 'pg-promise'
+import { errors } from 'pg-promise'
 
-import { notFound, badImplementation } from '../responses'
+import { badRequest, notFound, badImplementation } from '../responses'
 
 /**
  * Catch and react to certain errors in handling requests.
@@ -12,11 +12,15 @@ const errorsMiddleware = async (ctx, next) => {
     await next()
   }
   catch (err) {
-    console.error(err)
-    if (err instanceof QueryResultError) {
+    if (err instanceof errors.QueryResultError) {
       return notFound(ctx)
-    } else {
-      return badImplementation(ctx)
+    }
+    const { routine, detail, constraint, table, column } = err
+    switch (routine) {
+      case 'ExecConstraints':
+        return badRequest(ctx, 'Constraint Violated', { constraint, detail, table, column })
+      default:
+        return badImplementation(ctx)
     }
   }
 }
