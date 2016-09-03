@@ -22,7 +22,6 @@ router.post('/', async (ctx) => {
   if (_.isEmpty(entry)) {
     return badRequest(ctx)
   }
-  await sleep(1000)
   const newEntry = await addFood(user_id, entry)
   return created(ctx, newEntry)
 })

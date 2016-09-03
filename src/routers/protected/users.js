@@ -1,7 +1,7 @@
 import KoaRouter from 'koa-router'
 import _ from 'lodash'
 
-import { sleep } from '../../controllers/util'
+import { created, badRequest } from '../../responses'
 
 import {
   getUserById,
@@ -30,10 +30,8 @@ router.put('/profile', async (ctx) => {
   const { user_id } = ctx.session
   const entry = ctx.request.body
   if (_.isEmpty(entry)) {
-    ctx.status = 400
-    return
+    return badRequest(ctx)
   }
-  await sleep(1000) // TODO remove fake sleep
   ctx.body = await updateProfile(user_id, entry)
 })
 
