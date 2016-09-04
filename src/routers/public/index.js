@@ -1,6 +1,6 @@
 import KoaRouter from 'koa-router'
 
-import { created, noContent, badRequest, unauthorized } from '../../responses'
+import { success, created, noContent, badRequest, unauthorized } from '../../responses'
 
 import {
   login,
@@ -12,13 +12,12 @@ import {
 const router = new KoaRouter()
 
 router.post('/auth/login', async (ctx) => {
-  try {
-    ctx.body = await login(ctx.request.body)
-    ctx.status = 200
-  }
-  catch (err) {
+  const res = await login(ctx.request.body)
+  const { error, ...response } = res
+  if (error) {
     return unauthorized(ctx)
   }
+  return success(ctx, response)
 })
 
 router.post('/auth/logout', async (ctx) => {

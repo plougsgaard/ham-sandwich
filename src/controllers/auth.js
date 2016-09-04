@@ -4,6 +4,9 @@ import uuid from 'uuid'
 
 import { SESSION_TTL, EXPIRED_AT, CREATED_AT } from '../db'
 
+/**
+ * @return { id, user_id } | { error }
+ */
 export const getSession = async (sessionId) => {
   const sql = `
     SELECT id,user_id
@@ -14,12 +17,17 @@ export const getSession = async (sessionId) => {
   }
   try {
     return await db.one(sql, values)
-  }
-  catch (err) {
-    return null
+  } catch (error) {
+    if (!error) {
+      return { error: true }
+    }
+    return { error }
   }
 }
 
+/**
+ * @return { id } | { error }
+ */
 const getUserId = async (email, digest) => {
   const sql = `
     SELECT id
@@ -30,16 +38,29 @@ const getUserId = async (email, digest) => {
     email,
     digest
   }
-  return await db.one(sql, values)
+  try {
+    return await db.one(sql, values)
+  } catch (error) {
+    if (!error) {
+      return { error: true }
+    }
+    return { error }
+  }
 }
 
+/**
+ * @return { token, expired_at } | { error }
+ */
 export const login = async ({ email, digest }) => {
-  const userId = (await getUserId(email, digest)).id
+  const { error, id: userId } = await getUserId(email, digest)
+  if (error) {
+    return { error }
+  }
   const id = uuid.v4()
   const sql = `
     INSERT INTO sessions (id, user_id, ip_address, user_agent, expired_at)
     VALUES ($(id), $(userId), $(ip)::inet, $(agent), NOW() + $(interval)::interval)
-    RETURNING id AS token`
+    RETURNING id AS token, ${EXPIRED_AT}`
   const values = {
     id,
     userId,
@@ -47,9 +68,19 @@ export const login = async ({ email, digest }) => {
     agent: 'curl',
     interval: SESSION_TTL
   }
-  return await db.one(sql, values)
+  try {
+    return await db.one(sql, values)
+  } catch (error) {
+    if (!error) {
+      return { error: true }
+    }
+    return { error }
+  }
 }
 
+/**
+ * @return undefined | { error }
+ */
 export const logout = async (sessionId) => {
   const sql = `
     UPDATE sessions
@@ -58,9 +89,19 @@ export const logout = async (sessionId) => {
   const values = {
     sessionId
   }
-  return await db.none(sql, values)
+  try {
+    return await db.none(sql, values)
+  } catch (error) {
+    if (!error) {
+      return { error: true }
+    }
+    return { error }
+  }
 }
 
+/**
+ * @return { token } | { error }
+ */
 export const resetRequest = async (email) => {
   const sql = `
     INSERT INTO reset_tokens (user_email, token)
@@ -70,7 +111,14 @@ export const resetRequest = async (email) => {
     email,
     token: uuid.v4()
   }
-  return await db.one(sql, values)
+  try {
+    return await db.one(sql, values)
+  } catch (error) {
+    if (!error) {
+      return { error: true }
+    }
+    return { error }
+  }
 }
 
 export const resetConfirm = async ({ token, digest }) => {
