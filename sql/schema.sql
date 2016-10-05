@@ -11,7 +11,7 @@
 ------------------------------------------------------------
 ------------------------------------------------------------
 
--- Enable the uuid functions
+-- Enable the uuid functions (requires superuser privilege)
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 ------------------------------------------------------------

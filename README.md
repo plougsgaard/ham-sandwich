@@ -51,7 +51,7 @@ HTTP/1.1 200 OK
 
 This happens to be my current setup and these are my notes.
 
-`sudo apt-get install postgresql-9.4 postgresql-client-9.4`
+`sudo apt-get install postgresql-9.4 postgresql-client-9.4 postgresql-contrib-9.4`
 
 Enable remote access.
 
@@ -72,6 +72,18 @@ Create a user with its own database for good measure.
 This will prompt for a password. Come up with a great one using `apg`.
 
 `createdb -O development development`
+
+### One last thing
+
+The scripts work a lot better if `development` is a superuser.
+
+Start psql as the `postgres` user.
+
+`sudo -u postgres psql`
+
+In the `psql` console:
+
+`ALTER USER development WITH SUPERUSER;`
 
 ## nodejs and pm2 on Debian 8
 
