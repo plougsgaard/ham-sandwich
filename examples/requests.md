@@ -8,6 +8,7 @@ Remember to `brew install httpie` (or similar) first if you're not a cool `curl`
 → http post localhost:8200/auth/login email=a@a.a digest=b89f30366d73367f69e46055bff5778e2e613166868c3394d7ee9e42d843e92e
 
 {
+    "expired_at": 1478393667915,
     "token": "2e4518c4-39b0-4e09-a915-bed0b1700085"
 }
 ```

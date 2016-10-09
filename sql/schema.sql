@@ -134,6 +134,29 @@ CREATE TABLE foods_brands (
 ------------------------------------------------------------
 ------------------------------------------------------------
 
+CREATE TABLE barcodes (
+  id uuid PRIMARY KEY,
+  data text UNIQUE NOT NULL,
+  type text NOT NULL,
+  --
+  created_by uuid NOT NULL REFERENCES users(id),
+  created_at timestamptz NOT NULL DEFAULT NOW()
+);
+
+------------------------------------------------------------
+------------------------------------------------------------
+
+CREATE TABLE foods_barcodes (
+  food_id uuid NOT NULL REFERENCES foods(id),
+  barcode_id uuid NOT NULL REFERENCES barcodes(id),
+  --
+  created_by uuid NOT NULL REFERENCES users(id),
+  created_at timestamptz NOT NULL DEFAULT NOW()
+);
+
+------------------------------------------------------------
+------------------------------------------------------------
+
 CREATE VIEW foods_with_brands AS
   SELECT f.*, b.id AS brand_id, b.name AS brand_name
   FROM foods f

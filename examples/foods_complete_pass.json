@@ -1,0 +1,17 @@
+{
+  "name": "Beer",
+  "brand": "Carlsberg",
+  "amount": 800.5,
+  "unit": "g",
+  "items": 1,
+  "calories": 13.5,
+  "proteins": 13.5,
+  "carbohydrates": 13.5,
+  "sugars": 13.5,
+  "fat": 13.5,
+  "saturated": 13.5,
+  "fibres": 13.5,
+  "salt": 13.5,
+  "barcode": "123456789",
+  "barcodeType": "EAN_13"
+}
