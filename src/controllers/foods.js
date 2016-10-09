@@ -5,6 +5,7 @@ import uuid from 'uuid'
 import { CREATED_AT } from '../db'
 
 import { getBrandByName, addBrand } from './brands'
+import { findBarcode, addBarcode } from './barcodes'
 
 const FIELDS = `
   id,
@@ -43,7 +44,9 @@ export const addFood = async (userId, {
   fat,
   saturated,
   fibres,
-  salt
+  salt,
+  barcode,
+  barcodeType
 }) => {
   const sql = `
     INSERT INTO foods (
@@ -103,6 +106,25 @@ export const addFood = async (userId, {
       brandId: brandRow.id,
       userId
     })
+  if (barcode && barcodeType) {
+    const options = { userId, data: barcode, type: barcodeType }
+    const barcodeRow = await findBarcode(options) || await addBarcode(options)
+    db.none(`
+      INSERT INTO foods_barcodes (
+        food_id,
+        barcode_id,
+        created_by
+      )
+      VALUES (
+        $(foodId),
+        $(barcodeId),
+        $(userId)
+      )`, {
+        foodId: id,
+        barcodeId: barcodeRow.id,
+        userId
+      })
+  }
   return await getFoodWithBrands(id)
 }
 
