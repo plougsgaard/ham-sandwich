@@ -9,11 +9,22 @@ import {
   addFood,
   deleteFood
 } from '../../controllers/foods'
+import { getFoodImageUploadUrl } from '../../controllers/s3'
 
 const router = new KoaRouter()
 
 router.get('/', async (ctx) => {
   ctx.body = await getFoodsWithBrands()
+})
+
+router.post('/:foodId/image', async (ctx) => {
+  const { user_id } = ctx.session
+  const { foodId } = ctx.params
+  if (!foodId) {
+    return badRequest(ctx)
+  }
+  const url = await getFoodImageUploadUrl(foodId)
+  return created(ctx, { url })
 })
 
 router.post('/', async (ctx) => {
