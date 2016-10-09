@@ -1,5 +1,3 @@
-import { getSession } from '../controllers/auth'
-
 import { unauthorized } from '../responses'
 
 /**

@@ -1,11 +1,10 @@
 import KoaRouter from 'koa-router'
 import _ from 'lodash'
 
-import { created, badRequest } from '../../responses'
+import { badRequest } from '../../responses'
 
 import {
   getUserById,
-  getUserByToken,
   getUsers,
   updateProfile
 } from '../../controllers/users'

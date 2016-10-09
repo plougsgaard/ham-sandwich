@@ -1,7 +1,5 @@
 import KoaRouter from 'koa-router'
-import _ from 'lodash'
 
-import { sleep } from '../../controllers/util'
 import { getBrands } from '../../controllers/brands'
 
 const router = new KoaRouter()

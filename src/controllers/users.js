@@ -1,9 +1,6 @@
-import db from '../db'
-import _ from 'lodash'
+import db, { LAST_ONLINE_AT, CREATED_AT } from '../db'
 
 import { getSession } from './auth'
-
-import { LAST_ONLINE_AT, CREATED_AT } from '../db'
 
 const FIELDS = `
   id,

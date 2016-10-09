@@ -34,8 +34,7 @@ router.post('/auth/reset/confirm', async (ctx) => {
   try {
     await resetConfirm({ digest, token })
     return created(ctx)
-  }
-  catch (err) {
+  } catch (err) {
     return badRequest(ctx, 'The reset token has been deemed unsatisfactory.')
   }
 })
@@ -47,14 +46,11 @@ router.post('/auth/reset', async (ctx) => {
   }
   try {
     await resetRequest(email)
-  }
-  catch (err) {
+  } catch (err) {
     // ignore? yep
   }
-  finally {
-    // same response always to hide internals
-    return created(ctx)
-  }
+  // same response always to hide internals
+  return created(ctx)
 })
 
 export default router

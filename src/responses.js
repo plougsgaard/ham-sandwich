@@ -15,7 +15,7 @@ const getResponse = (status, body) => ({
 const successBody = {
   message: 'ヽ(^。^)ノ'
 }
-export const success = (ctx, body = createdBody) =>
+export const success = (ctx, body = successBody) =>
   Object.assign(ctx, getResponse(200, body))
 
 const createdBody = {
@@ -54,7 +54,7 @@ export const notFound = (ctx, error = notFoundText.error, message = notFoundText
 
 const badImplementationText = {
   error: 'Bad Implementation',
-  message: '¯\(º o)/¯'
+  message: '¯\\(º o)/¯'
 }
 export const badImplementation = (ctx, error = badImplementationText.error, message = badImplementationText.message) =>
   Object.assign(ctx, getError(500, error, message))

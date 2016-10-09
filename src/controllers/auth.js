@@ -1,8 +1,5 @@
-import db from '../db'
-import _ from 'lodash'
+import db, { SESSION_TTL, EXPIRED_AT } from '../db'
 import uuid from 'uuid'
-
-import { SESSION_TTL, EXPIRED_AT, CREATED_AT } from '../db'
 
 /**
  * @return { id, user_id } | { error }

@@ -1,8 +1,6 @@
-import db from '../db'
+import db, { CREATED_AT } from '../db'
 import _ from 'lodash'
 import uuid from 'uuid'
-
-import { CREATED_AT } from '../db'
 
 import { getBrandByName, addBrand } from './brands'
 import { findBarcode, addBarcode } from './barcodes'

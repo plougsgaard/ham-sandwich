@@ -10,8 +10,7 @@ import { badRequest, notFound, badImplementation } from '../responses'
 const errorsMiddleware = async (ctx, next) => {
   try {
     await next()
-  }
-  catch (err) {
+  } catch (err) {
     if (err instanceof errors.QueryResultError) {
       return notFound(ctx)
     }
