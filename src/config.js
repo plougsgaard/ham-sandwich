@@ -6,3 +6,4 @@ export const DB_USER = process.env.DB_USER || 'development'
 export const DB_PASS = process.env.DB_PASS || 'development'
 export const AWS_KEY = process.env.AWS_KEY
 export const AWS_SECRET = process.env.AWS_SECRET
+export const AWS_BUCKET = process.env.AWS_BUCKET
