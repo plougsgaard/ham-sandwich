@@ -20,6 +20,8 @@ const errorsMiddleware = async (ctx, next) => {
       case 'ExecConstraints':
         return badRequest(ctx, 'Constraint Violated', { constraint, detail, table, column })
       default:
+        // if we aren't able to determine more we should probably log the error
+        console.error(err)
         return badImplementation(ctx)
     }
   }
