@@ -2,8 +2,11 @@ import {
   AWS_KEY,
   AWS_SECRET,
   AWS_REGION,
-  AWS_BUCKET
+  AWS_BUCKET,
+  AWS_FOOD_IMAGE_PATH
 } from '../config'
+
+import { isValidUUID } from './util'
 
 const AWS = require('aws-sdk')
 
@@ -24,12 +27,12 @@ const getSignedUrlPromise = (actionKey, parameters) =>
   })
 
 export const getSignedUrl = ({ Bucket, Key, actionKey }) =>
-  getSignedUrlPromise(actionKey, { Bucket, Key, ContentType: 'application/octet-stream' })
+  getSignedUrlPromise(actionKey, { Bucket, Key, ContentType: 'application/octet-stream', ACL: 'public-read' })
 
 export const getFoodImageUploadUrl = (foodId) => (
   getSignedUrl({
     Bucket: AWS_BUCKET,
-    Key: foodId,
+    Key: `${AWS_FOOD_IMAGE_PATH}${foodId}`,
     actionKey: 'putObject'
   })
 )
