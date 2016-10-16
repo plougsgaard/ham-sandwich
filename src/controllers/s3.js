@@ -29,7 +29,7 @@ const getSignedUrlPromise = (actionKey, parameters) =>
 export const getSignedUrl = ({ Bucket, Key, actionKey }) =>
   getSignedUrlPromise(actionKey, { Bucket, Key, ContentType: 'application/octet-stream', ACL: 'public-read' })
 
-export const getFoodImageUploadUrl = (foodId) => (
+export const getFoodImageUploadUrl = (foodId) => isValidUUID(foodId) && (
   getSignedUrl({
     Bucket: AWS_BUCKET,
     Key: `${AWS_FOOD_IMAGE_PATH}${foodId}`,
